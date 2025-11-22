@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import argparse
 import sys
 import time
-from duckduckgo_search import DDGS
+from ddgs import DDGS
+
+# Fix Windows encoding issue
+if sys.platform == 'win32':
+    import codecs
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, 'strict')
+    sys.stderr = codecs.getwriter('utf-8')(sys.stderr.buffer, 'strict')
 
 def search_with_retry(query, max_results=10, max_retries=3):
     """

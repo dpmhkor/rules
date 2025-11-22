@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+#!/usr/bin/env /workspace/tmp_windsurf/venv/bin/python3
+# -*- coding: utf-8 -*-
 
 import asyncio
 import argparse
@@ -11,6 +12,12 @@ from multiprocessing import Pool
 import time
 from urllib.parse import urlparse
 import logging
+
+# Fix Windows encoding issue
+if sys.platform == 'win32':
+    import codecs
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, 'strict')
+    sys.stderr = codecs.getwriter('utf-8')(sys.stderr.buffer, 'strict')
 
 # Configure logging
 logging.basicConfig(
