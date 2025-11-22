@@ -37,5 +37,5 @@ if llm_provider != 'None':
     
     api_key_input = input(f"\nEnter your {llm_provider} API key (press Enter to skip): ")
     
-    with open(".temp_api_key", "w") as f:
+    with open(".temp_api_key", "w", encoding='utf-8') as f:
         f.write(api_key_input.strip())

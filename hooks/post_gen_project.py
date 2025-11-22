@@ -10,7 +10,7 @@ def setup_env_file():
     # If provider != 'None', retrieve whatever was saved in pre_gen_project.py
     if llm_provider != 'None':
         if os.path.exists(".temp_api_key"):
-            with open(".temp_api_key", "r") as f:
+            with open(".temp_api_key", "r", encoding='utf-8') as f:
                 llm_api_key = f.read().strip()
             os.remove(".temp_api_key")
 
@@ -27,11 +27,11 @@ def setup_env_file():
                 if env_var_name:
                     # Update .env or create it if needed
                     if not os.path.exists('.env'):
-                        with open('.env', 'w') as _:
+                        with open('.env', 'w', encoding='utf-8') as _:
                             pass
-                    with open('.env', 'r') as f:
+                    with open('.env', 'r', encoding='utf-8') as f:
                         lines = f.readlines()
-                    with open('.env', 'w') as f:
+                    with open('.env', 'w', encoding='utf-8') as f:
                         key_found = False
                         for line in lines:
                             if line.startswith(env_var_name + '='):
@@ -58,7 +58,7 @@ def handle_ide_rules():
         
         # Update .cursorrules if needed
         if os.path.exists('.cursorrules') and llm_provider == 'None':
-            with open('.cursorrules', 'r') as f:
+            with open('.cursorrules', 'r', encoding='utf-8') as f:
                 content = f.readlines()
             
             # Find the Screenshot Verification section and insert the notice before it
@@ -68,7 +68,7 @@ def handle_ide_rules():
                     content.insert(i + 1, '[NOTE TO USER: If you have configured or plan to configure an API key in the future, simply delete these two notice lines to enable these features.]\n\n')
                     break
             
-            with open('.cursorrules', 'w') as f:
+            with open('.cursorrules', 'w', encoding='utf-8') as f:
                 f.writelines(content)
     
     # For Windsurf projects: keep both .windsurfrules and scratchpad.md
@@ -80,7 +80,7 @@ def handle_ide_rules():
         
         # Update .windsurfrules if needed
         if os.path.exists('.windsurfrules') and llm_provider == 'None':
-            with open('.windsurfrules', 'r') as f:
+            with open('.windsurfrules', 'r', encoding='utf-8') as f:
                 content = f.readlines()
             
             # Find the Screenshot Verification section and insert the notice before it
@@ -90,7 +90,7 @@ def handle_ide_rules():
                     content.insert(i + 1, '[NOTE TO USER: If you have configured or plan to configure an API key in the future, simply delete these two notice lines to enable these features.]\n\n')
                     break
             
-            with open('.windsurfrules', 'w') as f:
+            with open('.windsurfrules', 'w', encoding='utf-8') as f:
                 f.writelines(content)
     
     # For GitHub Copilot projects: keep .github/copilot-instructions.md
@@ -104,7 +104,7 @@ def handle_ide_rules():
         
         # Update .github/copilot-instructions.md if needed
         if os.path.exists('.github/copilot-instructions.md') and llm_provider == 'None':
-            with open('.github/copilot-instructions.md', 'r') as f:
+            with open('.github/copilot-instructions.md', 'r', encoding='utf-8') as f:
                 content = f.readlines()
             
             # Find the Screenshot Verification section and insert the notice before it
@@ -114,7 +114,7 @@ def handle_ide_rules():
                     content.insert(i + 1, '[NOTE TO USER: If you have configured or plan to configure an API key in the future, simply delete these two notice lines to enable these features.]\n\n')
                     break
             
-            with open('.github/copilot-instructions.md', 'w') as f:
+            with open('.github/copilot-instructions.md', 'w', encoding='utf-8') as f:
                 f.writelines(content)
 
 def check_uv_installed():
