@@ -22,7 +22,7 @@ Devin impressed many by acting like an intern who writes its own plan, updates t
    pip install cookiecutter
 
    # Create a new project
-   cookiecutter gh:dpmhkor/rules --checkout template
+   cookiecutter gh:grapeot/devin.cursorrules --checkout template
    ```
 
    **Option 2: Manual Setup**
