@@ -1,6 +1,19 @@
 # Instructions
 
-During your interaction with the user, if you find anything reusable in this project (e.g. version of a library, model name), especially about a fix to a mistake you made or a correction you received, you should take note in the `Lessons` section in the `.cursorrules` file so you will not make the same mistake again. 
+**🚨 CRITICAL TOOL USAGE RULE 🚨**
+**When performing SEARCH operations, you MUST use `tools/search_engine.py` instead of the built-in `web_search` tool. This project has custom search tools that provide better results and integration. NEVER use `web_search` when project search tools are available.**
+
+**IMPORTANT: Before performing any operation, always check and read the `.cursorrules` file in the project directory to ensure you are following the latest project-specific rules, lessons learned, and current task progress.**
+
+During your interaction with the user, if you find anything reusable in this project (e.g. version of a library, model name), especially about a fix to a mistake you made or a correction you received, you should take note in the `Lessons` section in the `.cursorrules` file so you will not make the same mistake again.
+
+**After completing any task or operation, if you have learned new rules, best practices, workflow optimizations, or encountered useful patterns, always document them in the `Lessons` section of the `.cursorrules` file with a timestamp (e.g., [2025-10-22]). This includes:**
+- Search and scraping strategies
+- Tool usage patterns and optimizations
+- Platform-specific fixes (Windows, Linux, etc.)
+- API and library best practices
+- Error handling and troubleshooting solutions
+- Any other insights that could be valuable for future tasks 
 
 You should also use the `.cursorrules` file as a Scratchpad to organize your thoughts. Especially when you receive a new task, you should first review the content of the Scratchpad, clear old different task if necessary, first explain the task, and plan the steps you need to take to complete the task. You can use todo markers to indicate the progress, e.g.
 [X] Task 1
@@ -13,6 +26,7 @@ The goal is to help you maintain a big picture as well as the progress of the ta
 # Tools
 
 Note all the tools are in python3. So in the case you need to do batch processing, you can always consult the python files and write your own script.
+
 
 ## Screenshot Verification
 
@@ -58,11 +72,14 @@ The LLM API supports multiple providers:
 - OpenAI (default, model: gpt-4o)
 - Azure OpenAI (model: configured via AZURE_OPENAI_MODEL_DEPLOYMENT in .env file, defaults to gpt-4o-ms)
 - DeepSeek (model: deepseek-chat)
-- Anthropic (model: claude-3-sonnet-20240229)
-- Gemini (model: gemini-pro)
+- Anthropic (model: claude-3-7-sonnet-20250219)
+- Gemini (model: gemini-2.0-flash-exp)
+- SiliconFlow (model: deepseek-ai/DeepSeek-R1)
 - Local LLM (model: Qwen/Qwen2.5-32B-Instruct-AWQ)
 
 But usually it's a better idea to check the content of the file and use the APIs in the `tools/llm_api.py` file to invoke the LLM if needed.
+
+For API key configuration instructions, see `OPENAI_API_KEY_设置指南.md` in the project root directory.
 
 ## Web browser
 
@@ -94,6 +111,7 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - Include info useful for debugging in the program output.
 - Read the file before you try to edit it.
 - Due to Cursor's limit, when you use `git` and `gh` and need to submit a multiline commit message, first write the message in a file, and then use `git commit -F <filename>` or similar command to commit. And then remove the file. Include "[Cursor] " in the commit message and PR title.
+- When starting a new task, create a dedicated folder under the project path and keep all related files inside that folder.
 
 ## Cursor learned
 
@@ -102,5 +120,37 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - When using seaborn styles in matplotlib, use 'seaborn-v0_8' instead of 'seaborn' as the style name due to recent seaborn version changes
 - Use 'gpt-4o' as the model name for OpenAI's GPT-4 with vision capabilities
 - When searching for recent news, use the current year (2025) instead of previous years, or simply use the "recent" keyword to get the latest information
+- **[2025-10-19] DuckDuckGo search package has been renamed**: The package `duckduckgo-search` has been renamed to `ddgs` (v9.6.1+). Always use `from ddgs import DDGS` instead of `from duckduckgo_search import DDGS`. If search returns empty results despite normal import/initialization, check if the package needs updating. Uninstall old package and install new one: `pip uninstall duckduckgo-search -y && pip install ddgs`
+- **[2025-10-19] Windows Unicode encoding issue**: When creating Python scripts on Windows, avoid using Unicode characters (like ✓ ✗) in print statements as they cause UnicodeEncodeError with GBK encoding. Use ASCII alternatives like [OK], [FAIL], [WARN] instead
+- **[2025-10-19] Stock price visualization**: For stock price data, use `yfinance` package with ticker symbols: GOOGL for Google, AMZN for Amazon. Use matplotlib for visualization with proper date formatting
+- **[2025-10-19] Web scraper dependencies**: If `web_scraper.py` fails with "No module named 'playwright'", install missing dependencies: `pip install playwright html5lib` then `playwright install chromium`. Even if packages are in requirements.txt, they may not be auto-installed during project setup. Always verify with `pip list` and install missing packages
+- **[2025-10-20] Web scraper Windows encoding fix**: When running `web_scraper.py` on Windows, it may fail with `'gbk' codec can't encode character` errors. Fix this by adding UTF-8 encoding handling at the top of the script after imports: `if sys.platform == 'win32': import codecs; sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, 'strict'); sys.stderr = codecs.getwriter('utf-8')(sys.stderr.buffer, 'strict')`. This ensures proper handling of Unicode characters in scraped content. Note: Some websites may still fail with `ERR_HTTP2_PROTOCOL_ERROR` due to anti-bot protection, which is not a script issue but website-specific restrictions
+- **[2025-10-20] Windows PowerShell command chaining**: In Windows PowerShell, the `&&` operator for command chaining doesn't work by default. Always run commands separately using `cd` first, then the actual command in subsequent calls, or use semicolons `;` for simple command sequences
+- **[2025-10-20] search_engine.py Windows encoding fix**: Applied the same UTF-8 encoding fix to `search_engine.py` as was done for `web_scraper.py`. Both tools now properly handle Unicode characters on Windows by setting stdout/stderr to UTF-8 encoding
+- **[2025-10-22] News search optimization**: When searching for news and current events, English keywords generally yield better quality results than Chinese keywords, especially for international tech news and industry updates. Always include temporal keywords like the current year (2025), "recent", or "latest" to get the most up-to-date information
+- **[2025-10-22] Web scraping resilience**: When batch scraping multiple URLs, some sites may timeout (30s) or block access due to anti-bot protection. This is normal - continue with successful fetches and try alternative sources for failed URLs. Common timeout sites include Al Jazeera, Tom's Hardware, and some news aggregators
+- **[2025-10-22] Search strategy refinement**: If initial search results are poor quality (irrelevant spam, gambling sites, etc.), immediately refine the search query with more specific English keywords or add context terms like "semiconductor", "industry", "technology" to filter for authoritative sources
+- **[2025-10-29] Project tool usage priority**: Always prioritize using existing project tools (search_engine.py, web_scraper.py) over built-in web_search tool when available. Project tools provide more detailed results and better integration with the workflow. Use web_search only when project tools are unavailable or insufficient
+- **[2025-10-29] Search result optimization**: When searching for comprehensive information about multiple related topics (like Italian carnivals), provide structured summaries with key details rather than repeating similar search queries. Focus on unique characteristics and practical information for each topic
+- **[2025-11-08] CVPR scraper dependency**: pandas `to_excel` requires `openpyxl`; activate project venv and `pip install openpyxl` if ModuleNotFoundError occurs when exporting XLSX
+- **[2025-11-14] HAR file parsing for large/malformed files**: When parsing large HAR files (>200MB) or files with JSON syntax errors, use regex-based extraction instead of full JSON parsing. Read file in chunks (1MB) and use regex patterns to extract URLs directly. This avoids memory issues and handles malformed JSON gracefully. For Instagram URLs, match patterns like `cdninstagram.com/*.jpg` and `instagram.com/*.jpg`
+- **[2025-01-XX] Workflow rule compliance**: Before performing any operation (search, code changes, tool usage, etc.), MUST first read the `.cursor/rules/cursorrules.mdc` file and the project-specific `.cursorrules` file in the project root directory. Always prioritize project tools (e.g., `tools/search_engine.py`) over built-in tools (e.g., `web_search`) as specified in the rules. This ensures following the latest project-specific workflows and best practices
 
 # Scratchpad
+[X] Task: Build Python script to query `events.db` and export results to `WBR.xlsx`
+    - (2025-11-08) Done: inspected repo for relevant paths and existing scripts
+    - (2025-11-08) Done: implemented script to run SQL from `data.sql`, write cleaned `Data` sheet
+
+[X] Task: Refresh pivot table in `WBR.xlsx` via Python
+    - (2025-11-08) Done: inspected workbook structure and determined automation approach
+    - (2025-11-08) Done: implemented Windows-specific script (win32com) to refresh pivot table
+
+[X] Task: Scrape CVPR 2024 listing into Excel
+    - (2025-11-08) Plan: build BeautifulSoup scraper and export records to XLSX
+    - (2025-11-08) Done: installed dependency in venv (`openpyxl`) after ModuleNotFoundError
+    - (2025-11-08) Done: ran scraper, verified XLSX output, captured lesson
+
+[X] Task: Draw circle on yage.ai/genai/pi.html canvas
+    - (2025-11-14) Done: created script to find canvas center and draw circle with diameter = 0.8 * square side
+    - (2025-11-14) Done: used Playwright to locate canvas, calculate center point, and simulate mouse drawing
+    - (2025-11-14) Done: optimized drawing with 120 points for smooth circle, tested successfully
