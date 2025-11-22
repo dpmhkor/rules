@@ -15,6 +15,12 @@ unittest2>=1.1.0
 pytest>=8.0.0
 pytest-asyncio>=0.23.5
 
+# Excel export
+openpyxl>=3.1.0
+
+# Windows Excel automation
+pywin32>=307
+
 # Google Generative AI
 google-generativeai
 
